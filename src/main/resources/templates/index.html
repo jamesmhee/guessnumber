@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Random Number</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="text/javascript" th:src="@{/script.js}"></script>
+</head>
+
+<body class="m-10 border p-5 rounded-xl max-w-screen">
+  <div class="flex justify-between w-full">
+    <p class="text-2xl uppercase font-bold mb-3">GUESS THE NUMBER BELOW.</p>
+    <div class="flex gap-2">
+      <p class="text-xl">Your Score : </p>
+      <p th:text="${score}" class="text-2xl uppercase font-bold mb-3"></p>
+    </div>
+  </div>
+  <hr class="w-full bg-gray-200 h-[1px]">
+  <div class="flex gap-3">
+    <div class="flex flex-col items-center justify-center w-full max-w-screen">
+      <p class="text-xl my-2 p-3 border rounded" id="randomNumber" th:text="${randomNumber}"></p>    
+      <form id="formAction" class="flex flex-col gap-3 w-full" th:action="@{/submit}" method="post">      
+        <input placeholder="Guess the number of 3 digits ex: 123" class="bg-gray-200 border px-5 py-2 w-full rounded-lg" type="text" id="inputNumber" name="inputNumber" />
+        <button class="text-white bg-orange-500 px-5 py-2 rounded-md w-full" type="submit">GUESS</button>
+      </form>
+        
+    </div>
+    <div class="flex flex-col items-center justify-center w-full max-w-screen">
+      <div class="flex p-3 border rounded mt-5 max-h-full w-full">
+        <div class="border-r p-2 max-w-full flex flex-col items-center justify-center">
+          <p class="text-sm">RESULT HISTORY</p>
+          <button th:onclick="|location.href='/clear'|" class="px-5 py-2 rounded-md text-white bg-orange-500 w-auto" type="submit">CLEAR HISTORY</button>      
+        </div>      
+        <div class="p-2 overflow-auto max-h-96 w-full max-w-full" th:text="${userInput}" id="userInput" name="userInput"></div> 
+      </div>
+    </div>
+  </div>
+</body>
+
+
+</html>
