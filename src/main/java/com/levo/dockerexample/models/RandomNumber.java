@@ -9,7 +9,7 @@ public class RandomNumber {
     
     private String number;        
     
-    public void setNumber(String number){
+    public void setNumber(String number){        
         this.number = number;
     }
 
@@ -32,17 +32,26 @@ public class RandomNumber {
         }
     }
 
-    public String guessNumber(String userInput, String randoNumber){
-        String correct = "";
-        for(int i=0;i<userInput.length();i++){
-            if(userInput.charAt(i) == randoNumber.charAt(i)){
-                correct = "Correct";
-            }else{
-                correct = "Not Correct";
+    public String guessNumber(String userInput, String randomNumber){
+        int score = 0;
+        boolean checkTrue = false;
+        try{            
+            for(int i = 0; i < randomNumber.length(); i++){
+                char digit = randomNumber.charAt(i);
+                if (userInput.contains(String.valueOf(digit))) {
+                    score++;
+                    checkTrue = true;
+                } else {
+                    score--;
+                }
             }
+    
+            String correct = (score > 0 || checkTrue) ? "Correct" : "Incorrect";
+            return correct;
+        } catch (Error error){
+            throw error;
         }
-        return correct;
-        
     }
+    
 
 }

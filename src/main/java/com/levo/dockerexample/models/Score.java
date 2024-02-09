@@ -11,6 +11,10 @@ public class Score {
         this.score -= score;
     }
 
+    public void resetScore(){
+        this.score = 0;
+    }
+
     public Integer getScore(){
         return this.score;
     }

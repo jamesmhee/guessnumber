@@ -5,10 +5,14 @@ window.addEventListener("DOMContentLoaded", ()=>{
     const inputNumber = document.querySelector("#inputNumber")
     const form = document.querySelector("#formAction")
     const randomNumber = document.querySelector("#randomNumber")
-
-    inputNumber.addEventListener("keyup", (event)=>{
-        if(event.target.value === '' || event.target.value.length !== 3){
-
+    const btnsubmit = document.querySelector("#btn-submit")
+    
+    inputNumber.addEventListener("focusout", (event)=>{        
+        if(event.target.value === '' || event.target.value === " " || event.target.value === "  " || event.target.value.length > 3){
+            alert("Please field number 1 - 3 digits.")            
+            btnsubmit.disabled = true
+        }else{
+            btnsubmit.disabled = false
         }
     })
     // Event random    
@@ -19,5 +23,8 @@ window.addEventListener("DOMContentLoaded", ()=>{
     form.addEventListener("submit", (event)=>{
         // event.preventDefault()
         randomNumber.classList.remove("blur-lg")        
+        setTimeout(()=>{
+            console.log("sd")
+        }, 1000)
     })
 })

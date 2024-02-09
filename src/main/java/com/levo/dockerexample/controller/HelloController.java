@@ -5,13 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 // import com.levo.dockerexample.models.History;
 import com.levo.dockerexample.models.RandomNumber;
 import com.levo.dockerexample.models.Score;
+import com.levo.dockerexample.models.GameEntities;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,51 +20,67 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestMethod;
+import com.levo.dockerexample.models.GameRepository;
 
 @Controller
 public class HelloController {
-	
-	@Autowired	
-	private RandomNumber number;
-	Score point = new Score();
-	// private History history;
-	static ArrayList<String> history = new ArrayList<String>();
+		
+	@Autowired
+	private GameRepository GameRepository;	
 
+	@Autowired	
+	private RandomNumber number;		
+	
+	static ArrayList<String> history = new ArrayList<String>();
+	Score point = new Score();
 	@GetMapping("/")
 	public String Main(ModelMap Model) {		
-		String random = RandomNumber.generateRandomNumber(0, 999);
-		number.setNumber(random);		
-		String randomNum = number.getNumber();
-		Integer getScore = point.getScore();			
+		// Create RandomNumber
+		String random = number.generateRandomNumber(0, 999);	
+		// get data from db.	
+		List<GameEntities> allGames = GameRepository.findAll();		
+		// Store Guessnumber in Object game
+		number.setNumber(random);
+		// Get guessnumber from Object game
+		String randomNum = number.getNumber();		
+		// Show data to view.
 		Model.addAttribute("randomNumber", randomNum);
-		if(history.size() > 0){
-			Model.addAttribute("userInput", history);		
-		}
-		Model.addAttribute("score", getScore);		
+		if(allGames.size() > 0){			
+        	Model.addAttribute("games", allGames);			
+		}		
 		return "index"; // Return the logical view name without prefix and suffix
 	}	
 
 	@PostMapping("/submit")
-	public ModelAndView Submit(@RequestParam("inputNumber") String userInput, ModelMap Model){				
-		String randomNum = number.getNumber();				
-		Model.addAttribute("randomNumber", randomNum);
-		history.add(randomNum);		
-		String check = number.guessNumber(userInput, randomNum);
+	public ModelAndView Submit(@RequestParam("inputNumber") String userInput, ModelMap Model){							
+		
+		String randomNumber = number.getNumber();
+		// Set guessnumber to object game
+		GameEntities game = new GameEntities();
+		game.setGuessNumber(randomNumber);
+		// Set userinput to object game
+		String check = number.guessNumber(userInput, randomNumber);				
+		game.setUserGuess(userInput);
+		Model.addAttribute("randomNumber", randomNumber);		
+		// Set Userguess number from userinput to game object.
 		if(check == "Correct"){
-			point.setScore(1);
+			game.upScore(1);
 		}else{
-			point.delScore(1);
-		}
-		List<String> historyList = history.subList(0, history.size()-1); // For 		
-		Model.addAttribute("userInput", historyList);				
+			game.delScore(1);
+		}		
+		GameRepository.saveAndFlush(game);
+		// List<String> historyList = history.subList(0, history.size()-1); // For 		
+		// Model.addAttribute("userInput", historyList);				
 
 		return new ModelAndView("redirect:"+ "/");
 	}
 
 	@RequestMapping("/clear")
-	public static ModelAndView Clear(){
-		try{
-			history.clear();			
+	public ModelAndView Clear(){
+		try{						
+			// for delete all history
+			GameRepository.deleteAll();
 			System.out.println("HISTORY CLEARED");			
 		}catch(Error error){
 			System.out.println(error);
@@ -71,6 +88,10 @@ public class HelloController {
 		
 		return new ModelAndView("redirect:"+ "/");
 	}
+
+
+	
+	
 	
 	
 }
