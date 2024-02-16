@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-// import com.levo.dockerexample.models.History;
 import com.levo.dockerexample.models.RandomNumber;
-import com.levo.dockerexample.models.Score;
 import com.levo.dockerexample.models.GameEntities;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,9 +29,7 @@ public class HelloController {
 
 	@Autowired	
 	private RandomNumber number;		
-	
-	static ArrayList<String> history = new ArrayList<String>();
-	Score point = new Score();
+			
 	@GetMapping("/")
 	public String Main(ModelMap Model) {		
 		// Create RandomNumber
@@ -69,9 +65,7 @@ public class HelloController {
 		}else{
 			game.delScore(1);
 		}		
-		GameRepository.saveAndFlush(game);
-		// List<String> historyList = history.subList(0, history.size()-1); // For 		
-		// Model.addAttribute("userInput", historyList);				
+		GameRepository.saveAndFlush(game);						
 
 		return new ModelAndView("redirect:"+ "/");
 	}

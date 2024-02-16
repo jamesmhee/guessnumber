@@ -36,21 +36,21 @@
         </div>      
         <!-- <div class="p-2 overflow-auto max-h-96 w-full max-w-full" th:text="${userInput}" id="userInput" name="userInput"></div>  -->        
         <div class="flex max-w-full w-full h-auto">
-          <table class="p-2 max-h-96 w-full max-w-full">
-              <thead class="text-center">
+          <table class="p-2 max-h-96 w-full max-w-full border">
+              <thead class="text-center border">
                   <tr>                      
-                      <th>USERGUESSNUMBER</th>
-                      <th>GUESSNUMBER</th>
-                      <th>RESULT</th>
+                      <th class="border-r">USERGUESSNUMBER</th>
+                      <th class="border-r">GUESSNUMBER</th>
+                      <th class="border-r">RESULT</th>
                   </tr>
               </thead>
               <tbody class="text-center">
                   <tr th:each="game : ${games}">                      
-                      <td th:text="${game.userGuess}">s</td>
-                      <td th:text="${game.guessNumber}">s</td>
-                      <td>
-                        <span style="color:aquamarine;" th:if="${game.score == 1}">Correct</span>
-                        <span style="color:red;" th:if="${game.score != 1}">Incorrect</span>
+                      <td class="border" th:text="${game.userGuess}">s</td>
+                      <td class="border" th:text="${game.guessNumber}">s</td>
+                      <td class="border">
+                        <span style="color:#089c00; font-weight: bold;" th:if="${game.score == 1}">CORRECT &#x2705;</span>
+                        <span style="color:red; font-weight: bold;" th:if="${game.score != 1}">INCORRECT &#x274c;</span>
                       </td>                    
                   </tr>
               </tbody>
